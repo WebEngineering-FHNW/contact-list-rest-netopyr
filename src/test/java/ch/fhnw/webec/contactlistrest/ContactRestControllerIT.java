@@ -14,7 +14,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class ContactRestControllerIT {
+class ContactRestControllerIT {
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -48,6 +48,17 @@ public class ContactRestControllerIT {
         // then
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(result.getBody()).isEqualTo(expected);
+    }
+
+    @Test
+    void shouldReturnContactsFilteredByName() {
+        // when
+        final ResponseEntity<List> result = restTemplate.getForEntity("/api/contacts?name=ma", List.class);
+
+        // then
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(result.getBody()).hasSize(3);
+
     }
 
 }
